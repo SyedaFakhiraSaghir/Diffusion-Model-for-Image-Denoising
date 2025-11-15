@@ -1,24 +1,44 @@
-# Navigate to your project directory
-cd /path/to/your/Diffusion-Model-for-Image-Denoising
+if ! git rev-parse --verify HEAD >/dev/null 2>&1; then
+    echo "❌ No commits found. Creating initial commit..."
+    git add .
+    git commit -m "Initial commit: Diffusion Model for Image Denoising"
+fi
 
-# Remove the existing git repository (if corrupted)
-rm -rf .git
+# Solution 2: Check if master branch exists and push it
+if git show-ref --verify --quiet refs/heads/master; then
+    echo "✅ Found master branch. Pushing master to origin..."
+    git push -u origin master
+    exit 0
+fi
 
-# Initialize a fresh git repository
-git init
+# Solution 3: If no branches exist, create main
+echo "🔄 No branches found. Creating main branch..."
+git checkout -b main
 
-# Set your git configuration (replace with your info)
-git config user.name "Your Name"
-git config user.email "your.email@example.com"
+# Add all files and commit
+echo "💾 Adding files to commit..."
+git add .gitignore *.py *.sh
 
-# Add the proper files
-git add .gitignore
-git add *.py
-git add *.sh
+echo "📦 Creating commit..."
+git commit -m "feat: Complete diffusion denoising implementation
 
-# Make initial commit
-git commit -m "Initial commit: Diffusion model for image denoising"
+- Neural network for noise prediction
+- MNIST dataset processing with Gaussian noise
+- Training loop with validation
+- PSNR metrics and visualization
+- Environment setup scripts"
 
-# If you had a remote repository, add it back
-git remote add origin https://github.com/SyedaFakhiraSaghir/Diffusion-Model-for-Image-Denoising
-git push -u origin main
+# Solution 4: Push with different approaches
+echo "🚀 Attempting to push to GitHub..."
+
+# Try pushing main branch
+if git push -u origin main; then
+    echo "✅ Successfully pushed main branch!"
+elif git push -u origin master; then
+    echo "✅ Successfully pushed master branch!"
+else
+    echo "❌ Push failed. Trying force push..."
+    git push -u origin main --force
+fi
+
+echo "✅ Git issues resolution complete!"
